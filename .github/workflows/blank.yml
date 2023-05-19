@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+    compile:
+        name: Update source packages
+        runs-on: ubuntu-latest
+        steps:
+          - name: Check out the repo
+            uses: actions/checkout@v2
+          - name: Run the build process with Docker
+            uses: addnab/docker-run-action@v3
+            with:
+                image: registry.gitlab.com/turkman/devel/assets/docker-images
+                options: -v ${{ github.workspace }}:/root -v /output:/root/output
+                run: |
+                    set -e
+                    cd /root
+                    ymp repo --update --ignore-gpg
+                    ymp it bash --no-emerge
+                    find -type f | grep ympbuild | sort -V | while read line ; do
+                        cd $(dirname $line)
+                        echo $PWD
+                        ymp build --no-binary --ignore-dependency --no-processbar .
+                        mv *.ymp /root/output
+                        cd /root
+                    done
+                    ymp repo --index output --name=main
+                    rm -f /output/ymp-index.yaml.asc
+
+          - uses: "marvinpinto/action-automatic-releases@latest"
+            with:
+                repo_token: "${{ secrets.GITHUB_TOKEN }}"
+                automatic_release_tag: "current"
+                prerelease: false
+                title: "Latest release"
+                files: |
+                  /output/*.yaml
+                  /output/*.ymp
+
