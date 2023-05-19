@@ -1,1 +1,1 @@
-ymp template --name=papirus-icon-theme --version=20230301 --email=mt@gmail.com --maintainer=mt --source=https://github.com/PapirusDevelopmentTeam/$pkgname/archive/$version/$pkgname-$version.tar.gz --output=papirus-icon-theme
+ymp template --name=papirus-icon-theme --version=20230301 --email=mt@gmail.com --maintainer=mt --source=https://github.com/PapirusDevelopmentTeam/$name/archive/${version}/$name-${version}.tar.gz --output=papirus-icon-theme
