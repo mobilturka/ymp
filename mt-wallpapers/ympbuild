@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+name='mt-wallpapers'
+release='1'
+version='current'
+url='https://github.com/mobilturka/mt-wallpapers'
+description='mt wallpapers'
+email='03teknoloji@gmail.com'
+maintainer='mobilturka'
+license=('GPL')
+source=("https://github.com/mobilturka/$name/archive/refs/tags/${version}.tar.gz")
+depends=()
+makedepends=()
+md5sums=('035a11f24cfa8fb6d3858d74f78a1c36')
+group=(x11.misc)
+uses=()
+arch=('x86_64')
+
+cd $name-$version
+
+build(){
+    make $jobs
+}
+
+package(){
+    make install $jobs
+}
